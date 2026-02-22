@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARX | Prop Firm Comparison 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #04030a; --bg2: #07060f; --border: rgba(124,58,237,0.15);
+  --purple: #7C3AED; --pl: #A855F7; --text: #F0EEFF;
+  --muted: rgba(240,238,255,0.45); --dim: rgba(240,238,255,0.2);
+  --green: #10B981; --red: #F87171; --gold: #F59E0B; --gold2: #FCD34D; --cyan: #06B6D4;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Syne',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background: radial-gradient(ellipse 60% 50% at 15% 10%, rgba(90,20,200,0.1) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 40% at 85% 90%, rgba(100,30,230,0.07) 0%, transparent 60%);
+}
+header {
+  position:relative; z-index:10; padding:36px 48px 28px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+}
+.hl { display:flex; align-items:center; gap:14px; }
+.arx-logo { width:42px; height:42px; border-radius:9px; border:1px solid rgba(200,140,20,0.3); box-shadow:0 0 20px rgba(200,140,20,0.12), 0 0 40px rgba(124,58,237,0.1); }
+.bn { font-size:17px; font-weight:800; color:#fff; letter-spacing:-0.3px; }
+.bs { font-family:'DM Mono',monospace; font-size:8px; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-top:2px; }
+.hr { text-align:right; }
+.hr h1 { font-size:26px; font-weight:800; letter-spacing:-1px; background:linear-gradient(120deg,#fff 20%,#C084FC 60%,#7C3AED 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.hr p { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:2px; margin-top:4px; }
+.notice {
+  position:relative; z-index:10; padding:10px 48px;
+  background:rgba(245,158,11,0.07); border-bottom:1px solid rgba(245,158,11,0.15);
+  font-family:'DM Mono',monospace; font-size:11px; color:rgba(245,158,11,0.8);
+  letter-spacing:0.5px; display:flex; align-items:center; gap:10px;
+}
+.notice span { opacity:0.5; }
+.filters {
+  position:relative; z-index:10; padding:18px 48px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.fl { font-family:'DM Mono',monospace; font-size:10px; color:var(--dim); letter-spacing:1.5px; text-transform:uppercase; }
+.fb {
+  padding:5px 14px; border-radius:20px; cursor:pointer;
+  font-family:'DM Mono',monospace; font-size:11px;
+  border:1px solid var(--border); background:transparent; color:var(--muted); transition:all .18s;
+}
+.fb:hover { border-color:var(--pl); color:var(--pl); }
+.fb.active { background:rgba(124,58,237,0.2); border-color:var(--purple); color:#fff; }
+.fsep { width:1px; height:22px; background:var(--border); }
+.af {
+  display:flex; align-items:center; gap:6px; padding:5px 14px; border-radius:20px; cursor:pointer;
+  font-family:'DM Mono',monospace; font-size:11px;
+  border:1px solid rgba(245,158,11,0.25); background:transparent; color:rgba(245,158,11,0.7); transition:all .18s;
+}
+.af.active { background:rgba(245,158,11,0.15); border-color:var(--gold); color:var(--gold); }
+.main { position:relative; z-index:5; padding:28px 48px 80px; }
+.grid { display:flex; flex-direction:column; gap:16px; }
+
+/* CARD */
+.card { background:var(--bg2); border:1px solid var(--border); border-radius:14px; overflow:hidden; transition:border-color .2s, box-shadow .2s; }
+.card:hover { border-color:rgba(168,85,247,0.3); box-shadow:0 4px 40px rgba(124,58,237,0.06); }
+.card.is-aff { border-color:rgba(245,158,11,0.2); }
+.card.is-aff:hover { border-color:rgba(245,158,11,0.45); box-shadow:0 4px 40px rgba(245,158,11,0.05); }
+.card.hidden { display:none; }
+
+/* CARD HEADER */
+.ch {
+  display:grid; grid-template-columns:240px 1fr auto;
+  align-items:center; padding:18px 22px; gap:20px;
+  cursor:pointer; border-bottom:1px solid transparent; transition:background .15s, border-color .2s;
+}
+.ch:hover { background:rgba(255,255,255,0.018); }
+.card.open .ch { border-bottom-color:var(--border); }
+.fi { display:flex; align-items:center; gap:12px; }
+
+/* LOGO */
+.firm-logo-wrap {
+  width:44px; height:44px; border-radius:10px; flex-shrink:0;
+  border:1px solid rgba(255,255,255,0.1);
+  overflow:hidden; background:#fff;
+  display:flex; align-items:center; justify-content:center;
+}
+.firm-logo-wrap img { width:100%; height:100%; object-fit:contain; display:block; }
+.firm-logo-emoji {
+  width:44px; height:44px; border-radius:10px; flex-shrink:0;
+  border:1px solid rgba(255,255,255,0.08);
+  display:flex; align-items:center; justify-content:center; font-size:20px;
+}
+
+.fn { font-size:15px; font-weight:800; letter-spacing:-0.2px; }
+.fm { font-family:'DM Mono',monospace; font-size:9px; color:var(--dim); letter-spacing:1.5px; text-transform:uppercase; margin-top:2px; }
+.cs { display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
+.sv { font-size:13px; font-weight:700; }
+.sk { font-family:'DM Mono',monospace; font-size:9px; color:var(--dim); letter-spacing:1px; margin-top:1px; text-transform:uppercase; }
+.ssep { width:1px; height:26px; background:var(--border); }
+.cr { display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+.tag { padding:3px 9px; border-radius:10px; font-family:'DM Mono',monospace; font-size:9px; font-weight:500; border:1px solid; white-space:nowrap; }
+.ta  { color:var(--gold); border-color:rgba(245,158,11,0.4); background:rgba(245,158,11,0.08); }
+.tf  { color:#60A5FA; border-color:rgba(96,165,250,0.3); background:rgba(96,165,250,0.06); }
+.tu  { color:#34D399; border-color:rgba(52,211,153,0.3); background:rgba(52,211,153,0.06); }
+.tm  { color:#C084FC; border-color:rgba(192,132,252,0.3); background:rgba(192,132,252,0.06); }
+.chev { font-size:11px; color:var(--dim); transition:transform .3s; flex-shrink:0; }
+.card.open .chev { transform:rotate(180deg); }
+
+/* CARD BODY */
+.cb { display:none; padding:22px; }
+.card.open .cb { display:block; }
+.st { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px; }
+.tw { overflow-x:auto; margin-bottom:22px; }
+table.pt { width:100%; border-collapse:collapse; font-size:12px; }
+table.pt th {
+  font-family:'DM Mono',monospace; font-size:8.5px; font-weight:500; color:var(--dim);
+  letter-spacing:1.5px; text-transform:uppercase; padding:7px 11px; text-align:left;
+  border-bottom:1px solid var(--border); white-space:nowrap; background:rgba(255,255,255,0.015);
+}
+table.pt td { padding:9px 11px; border-bottom:1px solid rgba(255,255,255,0.035); vertical-align:middle; white-space:nowrap; }
+table.pt tr:last-child td { border-bottom:none; }
+table.pt tbody tr:hover td { background:rgba(255,255,255,0.02); }
+.phr td { font-weight:700; font-size:13px; background:rgba(255,255,255,0.025); }
+.pnc { display:flex; align-items:center; gap:8px; }
+.sp  { padding:2px 7px; border-radius:7px; font-family:'DM Mono',monospace; font-size:9px; background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.3); color:var(--pl); }
+.ip  { background:rgba(6,182,212,0.12); border-color:rgba(6,182,212,0.3); color:var(--cyan); }
+.ar td { font-size:11.5px; }
+.ar td:first-child { padding-left:28px; }
+.as  { font-family:'DM Mono',monospace; font-weight:500; color:var(--muted); }
+.ap  { font-family:'DM Mono',monospace; font-weight:700; color:var(--gold2); }
+.pf  { font-family:'DM Mono',monospace; font-size:11px; color:var(--gold); }
+.sg  { font-weight:700; color:var(--green); }
+.dr  { color:var(--red); }
+.cy  { color:var(--green); }
+.cno { color:var(--red); }
+.nu  { color:var(--muted); font-size:11px; }
+.tog { cursor:pointer; user-select:none; }
+.tog::after { content:' ▾'; font-size:10px; opacity:0.5; }
+.tog.open::after { content:' ▴'; }
+.arows { display:none; }
+.arows.vis { display:table-row-group; }
+.ig { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
+.ib { background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:10px; padding:14px; }
+.ibt { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+.il { list-style:none; display:flex; flex-direction:column; gap:5px; }
+.il li { font-size:11.5px; color:var(--muted); padding-left:12px; position:relative; }
+.il li::before { content:''; position:absolute; left:0; top:50%; transform:translateY(-50%); width:4px; height:4px; border-radius:50%; background:var(--purple); }
+.il.good li::before { background:var(--green); }
+.il.warn li::before { background:var(--gold); }
+.ctarow { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 18px; border-radius:10px; flex-wrap:wrap; }
+.ctarow.ca  { background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.25); }
+.ctarow.cn2 { background:rgba(124,58,237,0.07); border:1px solid rgba(124,58,237,0.2); }
+.ctt { font-size:13px; line-height:1.5; }
+.ctt strong { color:var(--gold); }
+.ctt.nt strong { color:var(--pl); }
+.ctt small { display:block; font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-top:2px; }
+.btn {
+  display:inline-flex; align-items:center; gap:7px; padding:9px 20px; border-radius:8px;
+  font-family:'DM Mono',monospace; font-size:11px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;
+  text-decoration:none; border:none; cursor:pointer; transition:opacity .18s, transform .15s;
+  white-space:nowrap; flex-shrink:0;
+}
+.btn:hover { opacity:.88; transform:translateY(-1px); }
+.btng { background:var(--gold); color:#000; }
+.btnp { background:var(--purple); color:#fff; }
+footer {
+  position:relative; z-index:10; text-align:center; padding:22px 48px;
+  border-top:1px solid var(--border); font-family:'DM Mono',monospace;
+  font-size:10px; color:var(--dim); letter-spacing:.8px; line-height:1.9;
+}
+.lb { display:inline-flex; align-items:center; gap:5px; color:#34D399; }
+.lb::before { content:'●'; font-size:7px; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+@media(max-width:900px) {
+  header, .filters, .main, footer, .notice { padding-left:20px; padding-right:20px; }
+  .ch { grid-template-columns:1fr auto; }
+  .cs { display:none; }
+  .ig { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hl">
+    <img class="arx-logo" src="https://i.postimg.cc/fRkFBhcS/ARX-web-logo.png" alt="ARX">
+    <div>
+      <div class="bn">ARX | Price &amp; Time</div>
+      <div class="bs">Alpha Range eXecution</div>
+    </div>
+  </div>
+  <div class="hr">
+    <h1>Prop Firm Comparison</h1>
+    <p>9 FIRMS &nbsp;·&nbsp; UPDATED FEBRUARY 2026 &nbsp;·&nbsp; REAL DATA</p>
+  </div>
+</header>
+
+<div class="notice">
+  ⚠ <span>Prices shown are indicative. Firms run promotions that can change prices at any time.</span>
+  Always verify at checkout before purchasing.
+</div>
+
+<div class="filters">
+  <span class="fl">Show:</span>
+  <button class="fb active" data-filter="all">All (9)</button>
+  <button class="fb" data-filter="forex">Forex / CFD</button>
+  <button class="fb" data-filter="futures">Futures</button>
+  <div class="fsep"></div>
+  <button class="af" id="affFilter">⭐ ARX Affiliates Only</button>
+</div>
+
+<div class="main">
+  <div class="grid" id="grid"></div>
+</div>
+
+<footer>
+  <p>Data sourced from official firm websites &amp; verified third-party reviews. Not financial advice.</p>
+  <p style="margin-top:4px">ARX | Price &amp; Time &nbsp;·&nbsp; www.arxpricetime.com &nbsp;·&nbsp; <span class="lb">Updated Feb 2026</span></p>
+</footer>
+
+<script>
+/* =====================================================
+   ✏️  TO UPDATE: edit FIRMS array below
+   ✏️  TO ADD FIRM: copy a firm object and add to array
+   ===================================================== */
+
+var FIRMS = [
+  {
+    id: "fxify", name: "FXIFY", type: "Forex / CFD", emoji: "⚡", color: "#7C3AED",
+    affiliate: true,
+    logo: "https://i.postimg.cc/j5VSJ8t2/fxify-logo.jpg",
+    link: "https://trader.fxify.com/purchasechallenge?affiliateId=5621",
+    trustpilot: 4.3, reviews: "5,000+", founded: 2023,
+    maxFunding: "$400,000", scaling: "$4,000,000",
+    platforms: ["MT4","MT5","DXTrade","TradingView"],
+    markets: ["Forex","Metals","Indices","Crypto","Stocks"],
+    challenges: [
+      { name:"1-Phase", steps:1,
+        accounts:[{s:"$10K",p:"$69"},{s:"$25K",p:"$119"},{s:"$50K",p:"$179"},{s:"$100K",p:"$299"},{s:"$200K",p:"$499"},{s:"$400K",p:"$899"}],
+        p1:"10%", p2:"—", ddd:"5%", mdd:"10%", ddt:"Trailing", tl:"Unlimited", md:"0", ps:"Up to 90%", fr:true },
+      { name:"2-Phase", steps:2,
+        accounts:[{s:"$10K",p:"$49"},{s:"$25K",p:"$89"},{s:"$50K",p:"$139"},{s:"$100K",p:"$229"},{s:"$200K",p:"$379"},{s:"$400K",p:"$649"}],
+        p1:"10%", p2:"5%", ddd:"4%", mdd:"10%", ddt:"Trailing", tl:"Unlimited", md:"0", ps:"Up to 90%", fr:true },
+      { name:"3-Phase", steps:3,
+        accounts:[{s:"$5K",p:"$39"},{s:"$10K",p:"$59"},{s:"$25K",p:"$99"},{s:"$50K",p:"$149"},{s:"$100K",p:"$249"}],
+        p1:"5%", p2:"5% / 5%", ddd:"4%", mdd:"10%", ddt:"Trailing", tl:"Unlimited", md:"0", ps:"Up to 90%", fr:true },
+      { name:"Instant Funding", steps:0,
+        accounts:[{s:"$5K",p:"$99"},{s:"$10K",p:"$169"},{s:"$25K",p:"$349"},{s:"$50K",p:"$599"}],
+        p1:"None — skip challenge", p2:"—", ddd:"2%", mdd:"4% trailing", ddt:"Trailing", tl:"N/A", md:"0", ps:"Up to 90%", fr:false }
+    ],
+    payouts:"Bi-weekly", news:true, wknd:true, ea:true, cr:"Yes (25% on 2-Phase)",
+    good:["Fee refunded on 1st payout","Instant Funding available","Up to $400K account","100% split on Crypto plan"],
+    bad:["Trailing drawdown — can be strict","Consistency rule on 2-Phase","Newer firm (est. 2023)"]
+  },
+  {
+    id: "the5ers", name: "The5%ers", type: "Forex / CFD", emoji: "🏆", color: "#10B981",
+    affiliate: true,
+    logo: "https://i.postimg.cc/9MGFPGfj/THE5ERS.jpg",
+    link: "https://www.the5ers.com/?afmc=sca",
+    trustpilot: 4.9, reviews: "10,000+", founded: 2016,
+    maxFunding: "$100,000", scaling: "$4,000,000",
+    platforms: ["MT5"],
+    markets: ["Forex","Metals","Indices","Commodities"],
+    challenges: [
+      { name:"High Stakes", steps:1,
+        accounts:[{s:"$100K",p:"$95"}],
+        p1:"10%", p2:"—", ddd:"4%", mdd:"8%", ddt:"Static", tl:"Unlimited", md:"0", ps:"Up to 100%", fr:true },
+      { name:"Bootcamp", steps:2,
+        accounts:[{s:"$20K",p:"$235"},{s:"$40K",p:"$385"},{s:"$100K",p:"$785"}],
+        p1:"8%", p2:"5%", ddd:"5%", mdd:"10%", ddt:"Static", tl:"Unlimited", md:"0", ps:"50% → 100%", fr:false }
+    ],
+    payouts:"Monthly (bi-weekly after scaling)", news:true, wknd:true, ea:true, cr:"No",
+    good:["Scale to $4M","Up to 100% profit split","Oldest & most trusted (est. 2016)","4.9 Trustpilot — #1 rated"],
+    bad:["Bootcamp split starts at 50%","Monthly payouts on entry plan","Only MT5 platform"]
+  },
+  {
+    id: "ftmo", name: "FTMO", type: "Forex / CFD", emoji: "🎯", color: "#3B82F6",
+    affiliate: true,
+    logo: "https://i.postimg.cc/CMsxzHtb/FTMO.png",
+    link: "https://trader.ftmo.com/?affiliates=rHueIgOUyaggDZhPGJBS",
+    trustpilot: 4.8, reviews: "20,000+", founded: 2015,
+    maxFunding: "$200,000", scaling: "$2,000,000",
+    platforms: ["MT4","MT5","cTrader","DXTrade"],
+    markets: ["Forex","Metals","Indices","Crypto","Stocks"],
+    challenges: [
+      { name:"1-Phase", steps:1,
+        accounts:[{s:"$10K",p:"~€99"},{s:"$25K",p:"~€179"},{s:"$50K",p:"~€249"},{s:"$100K",p:"~€399"},{s:"$200K",p:"~€749"}],
+        p1:"10%", p2:"—", ddd:"5%", mdd:"10%", ddt:"Static", tl:"Unlimited", md:"4", ps:"80% → 90%", fr:true },
+      { name:"Standard (2-Phase)", steps:2,
+        accounts:[{s:"$10K",p:"€155"},{s:"$25K",p:"€250"},{s:"$50K",p:"€345"},{s:"$100K",p:"€540"},{s:"$200K",p:"€1,080"}],
+        p1:"10%", p2:"5%", ddd:"5%", mdd:"10%", ddt:"Static", tl:"Unlimited", md:"4 per phase", ps:"80% → 90%", fr:true },
+      { name:"Aggressive (2-Phase)", steps:2,
+        accounts:[{s:"$10K",p:"€250"},{s:"$25K",p:"€345"},{s:"$50K",p:"€540"},{s:"$100K",p:"€1,080"},{s:"$200K",p:"€2,100"}],
+        p1:"20%", p2:"10%", ddd:"10%", mdd:"20%", ddt:"Static", tl:"Unlimited", md:"4 per phase", ps:"80% → 90%", fr:true },
+      { name:"Swing (2-Phase)", steps:2,
+        accounts:[{s:"$10K",p:"€199"},{s:"$25K",p:"€299"},{s:"$50K",p:"€449"},{s:"$100K",p:"€699"},{s:"$200K",p:"€1,299"}],
+        p1:"10%", p2:"5%", ddd:"5%", mdd:"10%", ddt:"Static", tl:"Unlimited", md:"4 per phase", ps:"80% → 90%", fr:true }
+    ],
+    payouts:"Monthly (on-demand after 14 days)", news:"Restricted on funded (2-min buffer)", wknd:"Swing only (funded)", ea:true, cr:"No",
+    good:["The original prop firm — est. 2015","Free retry if no rule violation","Swing removes news/weekend rules","Scale to $2M"],
+    bad:["News trading restricted on funded","No weekend hold on Standard funded","Monthly payout cycle"]
+  },
+  {
+    id: "alpha-capital", name: "Alpha Capital", type: "Forex / CFD", emoji: "Ⓐ", color: "#F59E0B",
+    affiliate: true,
+    logo: "https://i.postimg.cc/rmq7bW91/new-Alpha-Logo-6e4f7c78351e4a98f617.png",
+    link: "https://app.alphacapitalgroup.uk/signup/MQSC1",
+    trustpilot: 4.6, reviews: "14,000+", founded: 2021,
+    maxFunding: "$200,000", scaling: "$2,000,000",
+    platforms: ["MT5","cTrader","DXTrade"],
+    markets: ["Forex","Metals","Indices","Commodities"],
+    challenges: [
+      { name:"Alpha Pro (2-Step)", steps:2,
+        accounts:[{s:"$10K",p:"$99"},{s:"$25K",p:"$179"},{s:"$50K",p:"$279"},{s:"$100K",p:"$449"},{s:"$200K",p:"$799"}],
+        p1:"10%", p2:"5%", ddd:"5%", mdd:"6%", ddt:"Static", tl:"Unlimited", md:"0", ps:"80%", fr:false },
+      { name:"Alpha One (1-Step)", steps:1,
+        accounts:[{s:"$10K",p:"$149"},{s:"$25K",p:"$249"},{s:"$50K",p:"$379"},{s:"$100K",p:"$599"},{s:"$200K",p:"$999"}],
+        p1:"10%", p2:"—", ddd:"5%", mdd:"6%", ddt:"Static", tl:"Unlimited", md:"0", ps:"80%", fr:false },
+      { name:"Alpha Three (3-Step)", steps:3,
+        accounts:[{s:"$10K",p:"$50"},{s:"$25K",p:"$89"},{s:"$50K",p:"$139"},{s:"$100K",p:"$219"},{s:"$200K",p:"$399"}],
+        p1:"5% / 5% / 5%", p2:"—", ddd:"4%", mdd:"6%", ddt:"Static", tl:"Unlimited", md:"0", ps:"80%", fr:false }
+    ],
+    payouts:"Bi-weekly or On-Demand", news:true, wknd:true, ea:true, cr:"40% best-day rule",
+    good:["ARX Affiliate — use our link","No time limits","On-demand payouts","4.6/5 Trustpilot (14K+ reviews)"],
+    bad:["80% split — does not scale higher","Fee not refunded","40% consistency rule"]
+  },
+  {
+    id: "alpha-futures", name: "Alpha Futures", type: "Futures", emoji: "📈", color: "#EF4444",
+    affiliate: true,
+    logo: "https://i.postimg.cc/vBP2NKTm/0x0.png",
+    link: "https://app.alpha-futures.com/signup/Alexandra001849/",
+    trustpilot: 4.7, reviews: "2,000+", founded: 2023,
+    maxFunding: "$150,000", scaling: "$450,000",
+    platforms: ["NinjaTrader","Tradovate","Rithmic","AlphaTicks"],
+    markets: ["Futures (CME)","ES","NQ","YM","CL","GC"],
+    challenges: [
+      { name:"Standard", steps:1,
+        accounts:[{s:"$50K",p:"$79/mo"},{s:"$100K",p:"$159/mo"},{s:"$150K",p:"$239/mo"}],
+        p1:"6% ($3K/$6K/$9K)", p2:"—", ddd:"None", mdd:"4% EOD trailing", ddt:"EOD Trailing", tl:"Unlimited", md:"2", ps:"70% → 90%", fr:false },
+      { name:"Advanced", steps:1,
+        accounts:[{s:"$50K",p:"$139/mo"},{s:"$100K",p:"$279/mo"},{s:"$150K",p:"$419/mo"}],
+        p1:"8% ($4K/$8K/$12K)", p2:"—", ddd:"None", mdd:"3.5% EOD trailing", ddt:"EOD Trailing", tl:"Unlimited", md:"2", ps:"90% flat", fr:false }
+    ],
+    payouts:"Bi-weekly (Standard) / Weekly (Advanced)", news:true, wknd:"N/A (Futures)", ea:"Semi-auto only", cr:"50% (Standard) / None (Advanced)",
+    good:["ARX Affiliate — use our link","No daily drawdown limit","1-step evaluation","Sister firm of Alpha Capital"],
+    bad:["Monthly subscription model","Advanced plan pricey ($139–$419/mo)","Standard split starts at 70%"]
+  },
+  {
+    id: "tpt", name: "Take Profit Trader", type: "Futures", emoji: "💰", color: "#06B6D4",
+    affiliate: false,
+    logo: "https://i.postimg.cc/HLbCFT1b/tpt.jpg",
+    link: "https://takeprofittrader.com",
+    trustpilot: 4.6, reviews: "3,300+", founded: 2022,
+    maxFunding: "$150,000", scaling: "$150,000",
+    platforms: ["NinjaTrader","Tradovate","Rithmic"],
+    markets: ["Futures (CME)"],
+    challenges: [
+      { name:"Standard", steps:1,
+        accounts:[{s:"$25K",p:"$150/mo"},{s:"$50K",p:"$170/mo"},{s:"$75K",p:"$220/mo"},{s:"$100K",p:"$260/mo"},{s:"$150K",p:"$360/mo"}],
+        p1:"6% trailing target", p2:"—", ddd:"EOD based", mdd:"2% EOD trailing", ddt:"EOD Trailing", tl:"Unlimited", md:"0", ps:"80% → 90%", fr:false }
+    ],
+    payouts:"Immediate from Day 1 of PRO — no waiting!", news:true, wknd:"N/A (Futures)", ea:false, cr:"Yes",
+    good:["Payout from DAY 1 of PRO","No min profitable days","No withdrawal caps","Simple rules"],
+    bad:["No EAs or trading bots","Monthly subscription","No scaling plan","Consistency rule applies"]
+  },
+  {
+    id: "lucid", name: "Lucid Trading", type: "Futures", emoji: "✨", color: "#8B5CF6",
+    affiliate: false,
+    logo: "https://i.postimg.cc/05n985MN/Lucid-Trading-Lucid-Lucid-Trading-Prop-Firm-Prop-Firm-Shop-com.png",
+    link: "https://lucidtrading.com",
+    trustpilot: 4.8, reviews: "2,000+", founded: 2025,
+    maxFunding: "$150,000", scaling: "$750,000",
+    platforms: ["Rithmic","Tradovate","NinjaTrader","Quantower"],
+    markets: ["Futures (CME)","ES","NQ","YM","CL","GC"],
+    challenges: [
+      { name:"LucidPro Eval", steps:1,
+        accounts:[{s:"$25K",p:"$110"},{s:"$50K",p:"$165"},{s:"$100K",p:"$270"},{s:"$150K",p:"$385"}],
+        p1:"$1,500/$3K/$6K/$9K", p2:"—", ddd:"None", mdd:"4% EOD trailing", ddt:"EOD Trailing", tl:"Unlimited", md:"1", ps:"90%", fr:false },
+      { name:"LucidDirect (Instant)", steps:0,
+        accounts:[{s:"$25K",p:"$199"},{s:"$50K",p:"$329"},{s:"$100K",p:"$549"},{s:"$150K",p:"$749"}],
+        p1:"None — instantly funded", p2:"—", ddd:"None", mdd:"4% EOD trailing", ddt:"EOD Trailing", tl:"N/A", md:"0", ps:"90%", fr:false }
+    ],
+    payouts:"Daily — avg ~15 minutes (fastest in industry)", news:true, wknd:"N/A (Futures)", ea:true, cr:"40% (LucidPro) / 20% (LucidDirect)",
+    good:["Fastest payouts (~15 min avg)","No daily drawdown","Instant funding option","90% profit split"],
+    bad:["Brand new firm (est. 2025)","Consistency rule on both plans","Futures only"]
+  },
+  {
+    id: "apex", name: "APEX Trader Funding", type: "Futures", emoji: "🔺", color: "#F97316",
+    affiliate: false,
+    logo: "https://i.postimg.cc/13fm7xzc/apex1.jpg",
+    link: "https://apextraderfunding.com",
+    trustpilot: 4.5, reviews: "15,000+", founded: 2021,
+    maxFunding: "$300,000", scaling: "$300,000",
+    platforms: ["NinjaTrader","Tradovate","Rithmic"],
+    markets: ["Futures (CME)"],
+    challenges: [
+      { name:"Full (Standard)", steps:1,
+        accounts:[{s:"$25K",p:"$147/mo"},{s:"$50K",p:"$167/mo"},{s:"$75K",p:"$187/mo"},{s:"$100K",p:"$207/mo"},{s:"$150K",p:"$247/mo"},{s:"$250K",p:"$327/mo"},{s:"$300K",p:"$367/mo"}],
+        p1:"$1,500 → $25,000 (varies)", p2:"—", ddd:"Static daily", mdd:"Trailing intraday", ddt:"Trailing (intraday)", tl:"Unlimited", md:"7", ps:"100% first $25K, then 90%", fr:false }
+    ],
+    payouts:"Anytime - 8 trading days, 5 with $50+ profit", news:true, wknd:"N/A (Futures)", ea:true, cr:"Max 5:1 risk/reward ratio",
+    good:["100% of first $25K in profits","Accounts up to $300K","$378M+ paid to traders","Up to 20 accounts"],
+    bad:["Monthly subscription model","Intraday trailing DD — strict","7 minimum trading days"]
+  },
+  {
+    id: "fundednext", name: "Funded Next", type: "Forex / CFD", emoji: "⭐", color: "#EC4899",
+    affiliate: false,
+    logo: "https://i.postimg.cc/qMnVNkgt/fundednext-logo.jpg",
+    link: "https://fundednext.com",
+    trustpilot: 4.6, reviews: "8,000+", founded: 2022,
+    maxFunding: "$300,000", scaling: "$4,000,000",
+    platforms: ["MT5"],
+    markets: ["Forex","Metals","Indices","Commodities","Crypto"],
+    challenges: [
+      { name:"Stellar 1-Step", steps:1,
+        accounts:[{s:"$6K",p:"$99"},{s:"$15K",p:"$149"},{s:"$25K",p:"$199"},{s:"$50K",p:"$299"},{s:"$100K",p:"$449"},{s:"$200K",p:"$799"},{s:"$300K",p:"$1,099"}],
+        p1:"10%", p2:"—", ddd:"5%", mdd:"10%", ddt:"Static", tl:"Unlimited", md:"5", ps:"Up to 95%", fr:true },
+      { name:"Stellar 2-Step", steps:2,
+        accounts:[{s:"$6K",p:"$59"},{s:"$15K",p:"$99"},{s:"$25K",p:"$129"},{s:"$50K",p:"$199"},{s:"$100K",p:"$299"},{s:"$200K",p:"$549"},{s:"$300K",p:"$749"}],
+        p1:"8%", p2:"5%", ddd:"5%", mdd:"10%", ddt:"Static", tl:"Unlimited", md:"5", ps:"Up to 95%", fr:true }
+    ],
+    payouts:"Every 5 trading days (24–72h processing)", news:true, wknd:true, ea:true, cr:"No",
+    good:["15% profit share DURING evaluation","Up to 95% split","Scale to $4M","Fast 5-day payouts"],
+    bad:["Only MT5 platform","5 minimum trading days","Newer firm (est. 2022)"]
+  }
+];
+
+/* =====================================================
+   RENDER ENGINE — no need to edit below this line
+   ===================================================== */
+
+function stepsLabel(s) {
+  if (s === 0) return '<span class="sp ip">Instant</span>';
+  return '<span class="sp">' + s + '-Step</span>';
+}
+
+function typeTag(t) {
+  if (t.indexOf('Futures') > -1 && t.indexOf('Forex') === -1) return '<span class="tag tu">Futures</span>';
+  if (t.indexOf('Forex') > -1 && t.indexOf('Futures') === -1) return '<span class="tag tf">Forex / CFD</span>';
+  return '<span class="tag tm">Multi-Market</span>';
+}
+
+function boolStr(v) {
+  if (v === true)  return 'Allowed';
+  if (v === false) return 'Not Allowed';
+  return v;
+}
+
+/* Safe image fallback — called when logo img fails to load */
+function imgFail(img) {
+  var emoji = img.getAttribute('data-emoji') || '?';
+  var color = img.getAttribute('data-color') || '#7C3AED';
+  var wrap = img.parentElement;
+  wrap.className = 'firm-logo-emoji';
+  wrap.style.background = color + '18';
+  wrap.style.borderColor = color + '40';
+  wrap.innerHTML = emoji;
+}
+
+function renderFirm(f) {
+  // ── Logo ── (safe: data attrs carry fallback, no outer-scope JS in onerror)
+  var logoHtml;
+  if (f.logo) {
+    logoHtml = '<div class="firm-logo-wrap" style="border-color:' + f.color + '40">' +
+               '<img src="' + f.logo + '" alt="' + f.name + '" ' +
+               'data-emoji="' + f.emoji + '" data-color="' + f.color + '" ' +
+               'onerror="imgFail(this)">' +
+               '</div>';
+  } else {
+    logoHtml = '<div class="firm-logo-emoji" style="background:' + f.color + '18;border-color:' + f.color + '40">' + f.emoji + '</div>';
+  }
+
+  // ── Challenge table rows ──
+  var planRows = '';
+  for (var ci = 0; ci < f.challenges.length; ci++) {
+    var c = f.challenges[ci];
+    var pid = 'p-' + f.id + '-' + ci;
+    var accRows = '';
+    for (var ai = 0; ai < c.accounts.length; ai++) {
+      accRows += '<tr class="ar"><td colspan="2"><span class="as">' + c.accounts[ai].s + '</span></td>' +
+                 '<td colspan="2"><span class="ap">' + c.accounts[ai].p + '</span></td><td colspan="6"></td></tr>';
+    }
+    var p2cell = (c.p2 && c.p2 !== '—') ? ' / <span style="color:var(--muted);font-size:11px">' + c.p2 + '</span>' : '';
+    var frCell = c.fr ? '<span class="cy">✓</span>' : '<span class="cno">✗</span>';
+    planRows += '<tbody>' +
+      '<tr class="phr">' +
+        '<td><div class="pnc">' + c.name + ' ' + stepsLabel(c.steps) + '</div></td>' +
+        '<td><span class="tog" id="tg-' + pid + '" onclick="toggleAcc(\'' + pid + '\')">From <span class="pf">' + c.accounts[0].p + '</span></span></td>' +
+        '<td>' + c.p1 + p2cell + '</td>' +
+        '<td class="dr">' + c.ddd + '</td>' +
+        '<td class="dr">' + c.mdd + '</td>' +
+        '<td><span style="font-size:10px;color:var(--dim)">' + c.ddt + '</span></td>' +
+        '<td>' + c.md + '</td>' +
+        '<td class="sg">' + c.ps + '</td>' +
+        '<td>' + c.tl + '</td>' +
+        '<td>' + frCell + '</td>' +
+      '</tr>' +
+      '<tbody class="arows" id="' + pid + '">' + accRows + '</tbody>' +
+    '</tbody>';
+  }
+
+  // ── CTA ──
+  var ctaHtml;
+  if (f.affiliate) {
+    ctaHtml = '<div class="ctarow ca">' +
+      '<div class="ctt"><strong>⭐ ARX Affiliate Partner</strong>' +
+      '<small>Use our link — get the best available discount and support ARX at zero extra cost</small></div>' +
+      '<a class="btn btng" href="' + f.link + '" target="_blank" rel="nofollow">Start Here ↗</a>' +
+      '</div>';
+  } else {
+    ctaHtml = '<div class="ctarow cn2">' +
+      '<div class="ctt nt"><strong>' + f.name + '</strong>' +
+      '<small>Visit the official website for current prices and promotions</small></div>' +
+      '<a class="btn btnp" href="' + f.link + '" target="_blank">Check It Now ↗</a>' +
+      '</div>';
+  }
+
+  // ── Info lists ──
+  var goodItems = '';
+  for (var g = 0; g < f.good.length; g++) goodItems += '<li>' + f.good[g] + '</li>';
+  var badItems = '';
+  for (var b = 0; b < f.bad.length; b++) badItems += '<li>' + f.bad[b] + '</li>';
+
+  return '<div class="card ' + (f.affiliate ? 'is-aff' : '') + '" data-type="' + f.type.toLowerCase() + '" data-aff="' + f.affiliate + '" id="c-' + f.id + '">' +
+
+    '<div class="ch" onclick="toggleCard(\'' + f.id + '\')">' +
+      '<div class="fi">' +
+        logoHtml +
+        '<div><div class="fn">' + f.name + '</div><div class="fm">' + f.type + ' · Est. ' + f.founded + '</div></div>' +
+      '</div>' +
+      '<div class="cs">' +
+        '<div><div class="sv" style="color:var(--gold)">' + f.maxFunding + '</div><div class="sk">Max Account</div></div>' +
+        '<div class="ssep"></div>' +
+        '<div><div class="sv" style="color:var(--green)">' + f.scaling + '</div><div class="sk">Scaling</div></div>' +
+        '<div class="ssep"></div>' +
+        '<div><div class="sv">⭐ ' + f.trustpilot + '</div><div class="sk">Trustpilot (' + f.reviews + ')</div></div>' +
+        '<div class="ssep"></div>' +
+        '<div><div class="sv" style="color:var(--gold2)">From ' + f.challenges[0].accounts[0].p + '</div><div class="sk">Starting From</div></div>' +
+      '</div>' +
+      '<div class="cr">' +
+        (f.affiliate ? '<span class="tag ta">⭐ ARX Affiliate</span>' : '') +
+        typeTag(f.type) +
+        '<span class="chev">▼</span>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="cb">' +
+      '<div class="st">Challenge Plans — click "From price" to expand all account sizes &amp; prices</div>' +
+      '<div class="tw"><table class="pt">' +
+        '<thead><tr>' +
+          '<th style="width:180px">Plan</th><th>Price</th><th>Profit Target</th>' +
+          '<th>Daily DD</th><th>Max DD</th><th>DD Type</th><th>Min Days</th>' +
+          '<th>Split</th><th>Time Limit</th><th>Fee Refund</th>' +
+        '</tr></thead>' +
+        planRows +
+      '</table></div>' +
+      '<div class="ig">' +
+        '<div class="ib"><div class="ibt">Trading Conditions</div><ul class="il">' +
+          '<li><b>Platforms:</b> ' + f.platforms.join(', ') + '</li>' +
+          '<li><b>Markets:</b> ' + f.markets.slice(0,5).join(', ') + (f.markets.length > 5 ? '…' : '') + '</li>' +
+          '<li><b>Payouts:</b> ' + f.payouts + '</li>' +
+          '<li><b>News Trading:</b> ' + boolStr(f.news) + '</li>' +
+          '<li><b>Weekend Hold:</b> ' + boolStr(f.wknd) + '</li>' +
+          '<li><b>EAs / Bots:</b> ' + boolStr(f.ea) + '</li>' +
+          '<li><b>Consistency Rule:</b> ' + f.cr + '</li>' +
+        '</ul></div>' +
+        '<div class="ib">' +
+          '<div class="ibt">✓ Why Consider</div>' +
+          '<ul class="il good" style="margin-bottom:12px">' + goodItems + '</ul>' +
+          '<div class="ibt">⚠ Watch Out For</div>' +
+          '<ul class="il warn">' + badItems + '</ul>' +
+        '</div>' +
+      '</div>' +
+      ctaHtml +
+    '</div>' +
+  '</div>';
+}
+
+// Build grid
+var html = '';
+for (var i = 0; i < FIRMS.length; i++) {
+  html += renderFirm(FIRMS[i]);
+}
+document.getElementById('grid').innerHTML = html;
+
+// Toggle card open/close
+function toggleCard(id) {
+  document.getElementById('c-' + id).classList.toggle('open');
+}
+
+// Toggle account price rows
+function toggleAcc(pid) {
+  var rows = document.getElementById(pid);
+  var tog  = document.getElementById('tg-' + pid);
+  if (!rows) return;
+  rows.classList.toggle('vis');
+  tog.classList.toggle('open');
+}
+
+// Filters
+var activeType = 'all';
+var affOnly    = false;
+
+var filterBtns = document.querySelectorAll('.fb');
+for (var fi = 0; fi < filterBtns.length; fi++) {
+  filterBtns[fi].addEventListener('click', function() {
+    for (var x = 0; x < filterBtns.length; x++) filterBtns[x].classList.remove('active');
+    this.classList.add('active');
+    activeType = this.dataset.filter;
+    applyFilters();
+  });
+}
+
+document.getElementById('affFilter').addEventListener('click', function() {
+  affOnly = !affOnly;
+  this.classList.toggle('active', affOnly);
+  applyFilters();
+});
+
+function applyFilters() {
+  var cards = document.querySelectorAll('.card');
+  for (var ci = 0; ci < cards.length; ci++) {
+    var t = cards[ci].dataset.type;
+    var a = cards[ci].dataset.aff === 'true';
+    var show = true;
+    if (activeType === 'forex'   && t.indexOf('forex') === -1 && t.indexOf('cfd') === -1) show = false;
+    if (activeType === 'futures' && t.indexOf('futures') === -1) show = false;
+    if (affOnly && !a) show = false;
+    cards[ci].classList.toggle('hidden', !show);
+  }
+}
+</script>
+</body>
+</html>
