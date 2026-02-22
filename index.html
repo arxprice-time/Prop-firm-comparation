@@ -190,6 +190,7 @@ footer {
       <div class="bs">Alpha Range eXecution</div>
     </div>
   </div>
+  <a href="https://www.arxpricetime.com" style="display:inline-flex;align-items:center;gap:7px;color:rgba(240,238,255,0.5);text-decoration:none;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border-radius:6px;border:1px solid rgba(124,58,237,0.25);transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(240,238,255,0.5)'">← Back to ARX</a>
   <div class="hr">
     <h1>Prop Firm Comparison</h1>
     <p>9 FIRMS &nbsp;·&nbsp; UPDATED FEBRUARY 2026 &nbsp;·&nbsp; REAL DATA</p>
@@ -207,7 +208,7 @@ footer {
   <button class="fb" data-filter="forex">Forex / CFD</button>
   <button class="fb" data-filter="futures">Futures</button>
   <div class="fsep"></div>
-  <button class="af" id="affFilter">⭐ ARX Partners Only</button>
+  <button class="af" id="affFilter">⭐ ARX Affiliates Only</button>
 </div>
 
 <div class="main">
@@ -238,20 +239,20 @@ var FIRMS = [
     challenges: [
       { name:"1-Phase", steps:1,
         accounts:[{s:"$10K",p:"$69"},{s:"$25K",p:"$119"},{s:"$50K",p:"$179"},{s:"$100K",p:"$299"},{s:"$200K",p:"$499"},{s:"$400K",p:"$899"}],
-        p1:"10%", p2:"—", ddd:"5%", mdd:"10%", ddt:"Trailing", tl:"Unlimited", md:"5", ps:"Up to 90%", fr:true },
+        p1:"10%", p2:"—", ddd:"5%", mdd:"10%", ddt:"Trailing", tl:"Unlimited", md:"0", ps:"Up to 90%", fr:true },
       { name:"2-Phase", steps:2,
         accounts:[{s:"$10K",p:"$49"},{s:"$25K",p:"$89"},{s:"$50K",p:"$139"},{s:"$100K",p:"$229"},{s:"$200K",p:"$379"},{s:"$400K",p:"$649"}],
-        p1:"10%", p2:"5%", ddd:"4%", mdd:"10%", ddt:"Trailing", tl:"Unlimited", md:"5", ps:"Up to 90%", fr:true },
+        p1:"10%", p2:"5%", ddd:"4%", mdd:"10%", ddt:"Trailing", tl:"Unlimited", md:"0", ps:"Up to 90%", fr:true },
       { name:"3-Phase", steps:3,
         accounts:[{s:"$5K",p:"$39"},{s:"$10K",p:"$59"},{s:"$25K",p:"$99"},{s:"$50K",p:"$149"},{s:"$100K",p:"$249"}],
-        p1:"5%", p2:"5% / 5%", ddd:"4%", mdd:"10%", ddt:"Trailing", tl:"Unlimited", md:"5", ps:"Up to 90%", fr:true },
+        p1:"5%", p2:"5% / 5%", ddd:"4%", mdd:"10%", ddt:"Trailing", tl:"Unlimited", md:"0", ps:"Up to 90%", fr:true },
       { name:"Instant Funding", steps:0,
         accounts:[{s:"$5K",p:"$99"},{s:"$10K",p:"$169"},{s:"$25K",p:"$349"},{s:"$50K",p:"$599"}],
-        p1:"None  skip challenge", p2:"—", ddd:"2%", mdd:"4% trailing", ddt:"Trailing", tl:"N/A", md:"5", ps:"Up to 90%", fr:false }
+        p1:"None — skip challenge", p2:"—", ddd:"4%", mdd:"8% trailing", ddt:"Trailing", tl:"N/A", md:"0", ps:"Up to 90%", fr:false }
     ],
     payouts:"Bi-weekly", news:true, wknd:true, ea:true, cr:"Yes (25% on 2-Phase)",
     good:["Fee refunded on 1st payout","Instant Funding available","Up to $400K account","100% split on Crypto plan"],
-    bad:["Trailing drawdown can be strict","Consistency rule on 2-Phase","Newer firm (est. 2023)"]
+    bad:["Trailing drawdown — can be strict","Consistency rule on 2-Phase","Newer firm (est. 2023)"]
   },
   {
     id: "the5ers", name: "The5%ers", type: "Forex / CFD", emoji: "🏆", color: "#10B981",
@@ -270,8 +271,8 @@ var FIRMS = [
         accounts:[{s:"$20K",p:"$235"},{s:"$40K",p:"$385"},{s:"$100K",p:"$785"}],
         p1:"8%", p2:"5%", ddd:"5%", mdd:"10%", ddt:"Static", tl:"Unlimited", md:"0", ps:"50% → 100%", fr:false }
     ],
-    payouts:"Monthly (bi-weekly after scaling)", news:true, wknd:true, cr:"No",
-    good:["Scale to $4M","Up to 100% profit split","Oldest & most trusted (est. 2016)","4.9 Trustpilot #1 rated"],
+    payouts:"Monthly (bi-weekly after scaling)", news:true, wknd:true, ea:true, cr:"No",
+    good:["Scale to $4M","Up to 100% profit split","Oldest & most trusted (est. 2016)","4.9 Trustpilot — #1 rated"],
     bad:["Bootcamp split starts at 50%","Monthly payouts on entry plan","Only MT5 platform"]
   },
   {
@@ -322,12 +323,12 @@ var FIRMS = [
         p1:"5% / 5% / 5%", p2:"—", ddd:"4%", mdd:"6%", ddt:"Static", tl:"Unlimited", md:"0", ps:"80%", fr:false }
     ],
     payouts:"Bi-weekly or On-Demand", news:true, wknd:true, ea:true, cr:"40% best-day rule",
-    good:["ARX Affiliate use our link","No time limits","On-demand payouts","4.6/5 Trustpilot (14K+ reviews)"],
-    bad:["80% split does not scale higher","Fee not refunded","40% consistency rule"]
+    good:["ARX Affiliate — use our link","No time limits","On-demand payouts","4.6/5 Trustpilot (14K+ reviews)"],
+    bad:["80% split — does not scale higher","Fee not refunded","40% consistency rule"]
   },
   {
     id: "alpha-futures", name: "Alpha Futures", type: "Futures", emoji: "📈", color: "#EF4444",
-   affiliate: true,
+    affiliate: true,
     logo: "https://i.postimg.cc/vBP2NKTm/0x0.png",
     link: "https://app.alpha-futures.com/signup/Alexandra001849/",
     trustpilot: 4.7, reviews: "2,000+", founded: 2023,
@@ -343,7 +344,7 @@ var FIRMS = [
         p1:"8% ($4K/$8K/$12K)", p2:"—", ddd:"None", mdd:"3.5% EOD trailing", ddt:"EOD Trailing", tl:"Unlimited", md:"2", ps:"90% flat", fr:false }
     ],
     payouts:"Bi-weekly (Standard) / Weekly (Advanced)", news:true, wknd:"N/A (Futures)", ea:"Semi-auto only", cr:"50% (Standard) / None (Advanced)",
-    good:["ARX Partner use our link","No daily drawdown limit","1-step evaluation","Sister firm of Alpha Capital"],
+    good:["ARX Affiliate — use our link","No daily drawdown limit","1-step evaluation","Sister firm of Alpha Capital"],
     bad:["Monthly subscription model","Advanced plan pricey ($139–$419/mo)","Standard split starts at 70%"]
   },
   {
@@ -360,7 +361,7 @@ var FIRMS = [
         accounts:[{s:"$25K",p:"$150/mo"},{s:"$50K",p:"$170/mo"},{s:"$75K",p:"$220/mo"},{s:"$100K",p:"$260/mo"},{s:"$150K",p:"$360/mo"}],
         p1:"6% trailing target", p2:"—", ddd:"EOD based", mdd:"2% EOD trailing", ddt:"EOD Trailing", tl:"Unlimited", md:"0", ps:"80% → 90%", fr:false }
     ],
-    payouts:"Immediate from Day 1 of PRO no waiting!", news:true, wknd:"N/A (Futures)", ea:false, cr:"Yes",
+    payouts:"Immediate from Day 1 of PRO — no waiting!", news:true, wknd:"N/A (Futures)", ea:false, cr:"Yes",
     good:["Payout from DAY 1 of PRO","No min profitable days","No withdrawal caps","Simple rules"],
     bad:["No EAs or trading bots","Monthly subscription","No scaling plan","Consistency rule applies"]
   },
@@ -379,9 +380,9 @@ var FIRMS = [
         p1:"$1,500/$3K/$6K/$9K", p2:"—", ddd:"None", mdd:"4% EOD trailing", ddt:"EOD Trailing", tl:"Unlimited", md:"1", ps:"90%", fr:false },
       { name:"LucidDirect (Instant)", steps:0,
         accounts:[{s:"$25K",p:"$199"},{s:"$50K",p:"$329"},{s:"$100K",p:"$549"},{s:"$150K",p:"$749"}],
-        p1:"None instantly funded", p2:"—", ddd:"None", mdd:"4% EOD trailing", ddt:"EOD Trailing", tl:"N/A", md:"0", ps:"90%", fr:false }
+        p1:"None — instantly funded", p2:"—", ddd:"None", mdd:"4% EOD trailing", ddt:"EOD Trailing", tl:"N/A", md:"0", ps:"90%", fr:false }
     ],
-    payouts:"Daily  avg ~15 minutes (fastest in industry)", news:true, wknd:"N/A (Futures)", ea:true, cr:"40% (LucidPro) / 20% (LucidDirect)",
+    payouts:"Daily — avg ~15 minutes (fastest in industry)", news:true, wknd:"N/A (Futures)", ea:true, cr:"40% (LucidPro) / 20% (LucidDirect)",
     good:["Fastest payouts (~15 min avg)","No daily drawdown","Instant funding option","90% profit split"],
     bad:["Brand new firm (est. 2025)","Consistency rule on both plans","Futures only"]
   },
@@ -399,9 +400,9 @@ var FIRMS = [
         accounts:[{s:"$25K",p:"$147/mo"},{s:"$50K",p:"$167/mo"},{s:"$75K",p:"$187/mo"},{s:"$100K",p:"$207/mo"},{s:"$150K",p:"$247/mo"},{s:"$250K",p:"$327/mo"},{s:"$300K",p:"$367/mo"}],
         p1:"$1,500 → $25,000 (varies)", p2:"—", ddd:"Static daily", mdd:"Trailing intraday", ddt:"Trailing (intraday)", tl:"Unlimited", md:"7", ps:"100% first $25K, then 90%", fr:false }
     ],
-    payouts:"Anytime 8 trading days, 5 with $50+ profit", news:true, wknd:"N/A (Futures)", ea:true, cr:"Max 5:1 risk/reward ratio",
+    payouts:"Anytime — 8 trading days, 5 with $50+ profit", news:true, wknd:"N/A (Futures)", ea:true, cr:"Max 5:1 risk/reward ratio",
     good:["100% of first $25K in profits","Accounts up to $300K","$378M+ paid to traders","Up to 20 accounts"],
-    bad:["Monthly subscription model","Intraday trailing DD strict","7 minimum trading days"]
+    bad:["Monthly subscription model","Intraday trailing DD — strict","7 minimum trading days"]
   },
   {
     id: "fundednext", name: "Funded Next", type: "Forex / CFD", emoji: "⭐", color: "#EC4899",
